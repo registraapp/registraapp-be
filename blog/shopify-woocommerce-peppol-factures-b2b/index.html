@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="fr-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shopify, WooCommerce et Peppol : factures B2B conformes</title>
+<meta name="description" content="Boutique Shopify ou WooCommerce en Belgique : émettre des factures B2B conformes via Peppol. Données à collecter, trois montages, pièges et tests.">
+<link rel="canonical" href="https://registraapp.be/blog/shopify-woocommerce-peppol-factures-b2b/">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="fr_BE">
+<meta property="og:site_name" content="Registra">
+<meta property="og:title" content="Shopify, WooCommerce et Peppol : factures B2B conformes">
+<meta property="og:description" content="Boutique Shopify ou WooCommerce en Belgique : émettre des factures B2B conformes via Peppol. Données à collecter, trois montages, pièges et tests.">
+<meta property="og:url" content="https://registraapp.be/blog/shopify-woocommerce-peppol-factures-b2b/">
+<meta property="article:published_time" content="2026-11-03">
+<meta property="article:modified_time" content="2026-11-03">
+<meta name="author" content="Amine">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#F5F6F8;--ink:#13202E;--soft:#4F5D6C;--rule:#D2D8E0;--acc:#7A2E1E;--acc-dark:#5F2316;--acc-tint:#F5E7E2;--ok:#2D6A4F;--ok-tint:#E2F0E8;--warn:#8A5A00;--warn-tint:#F7EDD5;--bad:#9B2C2C;--bad-tint:#F6E1E1;--focus:#2C5FD9;--serif:"Newsreader",Georgia,serif;--sans:"Inter Tight",system-ui,sans-serif}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;overflow-wrap:break-word}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  a{color:var(--ink)}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  header .wrap{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:space-between;align-items:baseline;padding:24px 20px;border-bottom:1px solid var(--rule)}
+  .brand{font-family:var(--serif);font-weight:600;font-size:26px;text-decoration:none;letter-spacing:-.01em}
+  .brand small{font-family:var(--sans);font-weight:400;font-size:14px;color:var(--soft);margin-left:10px}
+  header nav.mainnav{display:flex;flex-wrap:wrap;gap:6px 20px;align-items:baseline}
+  header nav.mainnav a{margin:0;font-weight:500;text-decoration:none;border-bottom:2px solid transparent;padding-bottom:1px}
+  header nav.mainnav a:hover{border-bottom-color:var(--rule)}
+  header nav.mainnav a[aria-current="page"]{border-bottom-color:currentColor}
+  .hero{padding:64px 0 48px;max-width:800px}
+  .hero.small{padding:40px 0 32px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(31px,4.8vw,50px);line-height:1.1;letter-spacing:-.015em;margin:0 0 20px;overflow-wrap:break-word}
+  .hero.small h1{font-size:clamp(30px,4.4vw,46px);line-height:1.12}
+  .lede{font-size:19px;color:var(--soft);margin:0 0 28px;max-width:62ch}
+  .actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .btn{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;padding:14px 22px;border-radius:4px;border:0;font:inherit;font-weight:600;cursor:pointer;text-align:center}
+  .btn:hover{background:var(--acc-dark)}
+  .btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink);padding:12px 20px}
+  .btn.ghost:hover{background:#fff}
+  section{padding:56px 0;border-top:1px solid var(--rule)}
+  h2.s{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.2;margin:0 0 10px}
+  .sub{color:var(--soft);max-width:64ch;margin:0 0 28px}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .grid4{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .card{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:24px}
+  .card h3{font-family:var(--serif);font-size:21px;margin:0 0 10px}
+  .card p{margin:0 0 10px}.card p:last-child{margin-bottom:0}
+  .card ul{padding-left:18px;margin:0}.card li{margin-bottom:7px}
+  .card.paper{background:#fbfbfb}
+  .card.real{border:2px solid var(--acc);background:var(--acc-tint)}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .fact{background:#fff;border:1px solid var(--rule);border-left:5px solid var(--acc);border-radius:0 6px 6px 0;padding:18px 20px}
+  .fact strong{display:block;font-family:var(--serif);font-size:20px;line-height:1.25;margin-bottom:4px}
+  .fact p{margin:0;font-size:16px}
+  .fact .src{display:block;font-size:13px;color:var(--soft);margin-top:6px}
+  .quiz{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:8px 24px 20px}
+  .q{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--rule)}
+  .q:last-of-type{border-bottom:0}
+  .q p{margin:0}.q small{display:block;color:var(--soft);font-size:13px;margin-top:2px}
+  .seg{display:inline-flex;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+  .seg button{font:inherit;font-size:14px;border:0;background:#fff;padding:7px 12px;cursor:pointer;color:var(--ink);border-left:1px solid var(--rule)}
+  .seg button:first-child{border-left:0}
+  .seg button[aria-pressed="true"].y{background:var(--ok);color:#fff}
+  .seg button[aria-pressed="true"].p{background:var(--warn);color:#fff}
+  .seg button[aria-pressed="true"].n{background:var(--bad);color:#fff}
+  .result{margin-top:22px;border-radius:6px;padding:22px 24px;border:1px solid var(--rule);background:#fff}
+  .result.bad{background:var(--bad-tint);border-color:var(--bad)}
+  .result.mid{background:var(--warn-tint);border-color:var(--warn)}
+  .result.good{background:var(--ok-tint);border-color:var(--ok)}
+  .result h3{font-family:var(--serif);font-size:24px;margin:0 0 8px}
+  .result ul{margin:10px 0 0;padding-left:18px}
+  .offers{display:grid;grid-template-columns:repeat(var(--cols,3),1fr);gap:20px}
+  .offer{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:24px;display:flex;flex-direction:column}
+  .offer.main{border:2px solid var(--acc);background:var(--acc-tint)}
+  .offer h3{font-family:var(--serif);font-size:22px;margin:0 0 4px}
+  .offer .price{font-size:26px;font-weight:600;margin:6px 0 12px;line-height:1.25}
+  .offer .price span{display:block;font-size:15px;font-weight:400;color:var(--soft)}
+  .offer ul{padding-left:18px;margin:0 0 16px}.offer li{margin-bottom:6px}
+  .offer .btn{margin-top:auto;align-self:flex-start}
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:0 0 8px;max-width:720px}
+  ol.steps li{counter-increment:s;position:relative;padding:0 0 22px 52px}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;border:2px solid var(--acc);display:grid;place-items:center;font-weight:600;color:var(--acc)}
+  ol.steps strong{display:block}
+  .guarantee{background:#fff;border-left:5px solid var(--acc);padding:22px 26px;max-width:760px;border-radius:0 6px 6px 0}
+  .guarantee p{margin:0 0 10px}.guarantee p:last-child{margin:0}
+  form{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:26px;max-width:620px}
+  label{display:block;font-weight:500;margin-bottom:6px}
+  input,select,textarea{width:100%;max-width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid #B5BFCC;border-radius:4px;background:#fff;color:var(--ink);margin-bottom:16px}
+  .contact-grid{display:grid;grid-template-columns:minmax(0,620px) minmax(0,1fr);gap:28px;align-items:start}
+  .booking{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:22px 24px}
+  .booking h3{font-family:var(--serif);font-size:21px;margin:0 0 8px}
+  .booking p{margin:0 0 14px}
+  .fine{font-size:14px;color:var(--soft)}
+  .thanks{display:none;background:#fff;border:1px solid var(--rule);border-radius:6px;padding:26px;max-width:620px}
+  footer{border-top:1px solid var(--rule);padding:30px 0 48px;color:var(--soft);font-size:14px}
+  footer p{margin:0 0 10px}
+  .faq{max-width:780px}
+  .faq details{border-bottom:1px solid var(--rule);padding:14px 0}
+  .faq summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:16px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";font-weight:400;font-size:22px;line-height:1}
+  .faq details[open] summary::after{content:"\2212"}
+  .faq details p{margin:10px 0 0;color:var(--soft)}
+  /* guides */
+  .crumb{font-size:14px;color:var(--soft);padding-top:22px}
+  .crumb ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px}
+  .crumb li+li::before{content:"\203A";margin:0 6px;color:var(--soft)}
+  .crumb a{color:var(--soft)}
+  .meta{font-size:14px;color:var(--soft);margin:0}
+  .answer{background:var(--acc-tint);border:2px solid var(--acc);border-radius:6px;padding:20px 24px;max-width:760px;margin:0 0 8px}
+  .answer p{margin:0}
+  .prose{max-width:740px;padding-bottom:24px}
+  .prose h2{font-family:var(--serif);font-weight:600;font-size:clamp(25px,3.2vw,30px);line-height:1.2;margin:48px 0 12px;padding-top:28px;border-top:1px solid var(--rule)}
+  .prose h3{font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.3;margin:28px 0 8px}
+  .prose p,.prose ul,.prose ol{margin:0 0 16px}
+  .prose ul,.prose ol:not(.steps){padding-left:22px}
+  .prose li{margin-bottom:6px}
+  .prose code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:#fff;border:1px solid var(--rule);border-radius:3px;padding:1px 5px;overflow-wrap:anywhere}
+  .prose pre{background:#13202E;color:#E8EDF3;border-radius:6px;padding:16px 18px;overflow-x:auto;font-size:14px;line-height:1.55;margin:0 0 18px;max-width:100%}
+  .prose pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;overflow-wrap:normal}
+  .tbl{overflow-x:auto;margin:0 0 20px;border:1px solid var(--rule);border-radius:6px;background:#fff}
+  .tbl table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.5}
+  .tbl caption{text-align:left;font-size:14px;color:var(--soft);padding:12px 14px 0}
+  .tbl th,.tbl td{text-align:left;vertical-align:top;padding:11px 14px;border-bottom:1px solid var(--rule)}
+  .tbl thead th{background:var(--acc-tint);font-weight:600}
+  .tbl tr:last-child td{border-bottom:0}
+  .prose ul.check{list-style:none;padding-left:0}
+  ul.check li{position:relative;padding-left:30px}
+  ul.check li::before{content:"";position:absolute;left:2px;top:.32em;width:16px;height:16px;border:2px solid var(--acc);border-radius:3px;background:#fff}
+  .cta{background:#fff;border:1px solid var(--rule);border-left:5px solid var(--acc);border-radius:0 6px 6px 0;padding:22px 26px;margin:32px 0 8px}
+  .cta p{margin:0 0 14px}
+  .note{background:var(--warn-tint);border-left:5px solid var(--warn);padding:14px 18px;border-radius:0 6px 6px 0;font-size:15px}
+  .sources ol{padding-left:22px;font-size:15px}
+  .sources li{overflow-wrap:anywhere}
+  .related{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:0 0 16px}
+  .related a{display:block;background:#fff;border:1px solid var(--rule);border-radius:6px;padding:16px 18px;text-decoration:none}
+  .related a strong{display:block;font-family:var(--serif);font-size:19px;line-height:1.25;margin-bottom:4px}
+  .related a span{color:var(--soft);font-size:15px}
+  .guides{display:grid;gap:20px;max-width:800px;margin-bottom:40px}
+  .guides .card h2{font-family:var(--serif);font-size:24px;line-height:1.25;margin:0 0 8px}
+  .guides .card h2 a{text-decoration:none}
+  .tag{display:inline-block;font-size:13px;font-weight:600;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+  @media (max-width:860px){.split,.grid4,.facts,.offers,.related,.contact-grid{grid-template-columns:1fr}.q{grid-template-columns:1fr}.hero{padding:44px 0 36px}.hero.small{padding:32px 0 24px}}
+  @media (max-width:560px){.wrap{padding:0 16px}header .wrap{padding:20px 16px}header nav.mainnav{width:100%;gap:6px 16px}.brand small{display:block;margin:2px 0 0}.answer,.cta,.card,.offer,form,.quiz,.booking{padding:18px}.quiz{padding:4px 16px 14px}.actions .btn{width:100%}h2.s{font-size:26px}.tbl{overflow-x:visible}.tbl thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.tbl tr{display:block;border-bottom:1px solid var(--rule);padding:6px 0}.tbl tbody tr:last-child{border-bottom:0}.tbl td{display:block;border:0;padding:4px 14px}.tbl td::before{content:attr(data-label);display:block;font-size:12px;font-weight:600;color:var(--soft);text-transform:uppercase;letter-spacing:.04em}.tbl td:first-child{font-weight:600}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://registraapp.be/#org", "name": "Registra", "url": "https://registraapp.be/", "logo": "https://registraapp.be/favicon.svg", "founder": {"@type": "Person", "name": "Amine", "jobTitle": "Ingénieur DevOps freelance", "knowsAbout": ["AWS", "Google Cloud", "Microsoft Azure", "Kubernetes", "Terraform"]}, "areaServed": {"@type": "Country", "name": "Belgique"}}, {"@type": "WebSite", "@id": "https://registraapp.be/#site", "url": "https://registraapp.be/", "name": "Registra", "inLanguage": "fr-BE", "publisher": {"@id": "https://registraapp.be/#org"}}, {"@type": "Article", "@id": "https://registraapp.be/blog/shopify-woocommerce-peppol-factures-b2b/#article", "headline": "Shopify ou WooCommerce et Peppol : émettre des factures B2B conformes", "description": "Boutique Shopify ou WooCommerce en Belgique : émettre des factures B2B conformes via Peppol. Données à collecter, trois montages, pièges et tests.", "inLanguage": "fr-BE", "datePublished": "2026-11-03", "dateModified": "2026-11-03", "author": {"@type": "Person", "name": "Amine", "jobTitle": "Ingénieur DevOps freelance"}, "publisher": {"@id": "https://registraapp.be/#org"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://registraapp.be/blog/shopify-woocommerce-peppol-factures-b2b/", "url": "https://registraapp.be/blog/shopify-woocommerce-peppol-factures-b2b/", "name": "Shopify, WooCommerce et Peppol : factures B2B conformes", "isPartOf": {"@id": "https://registraapp.be/#site"}, "inLanguage": "fr-BE"}, "url": "https://registraapp.be/blog/shopify-woocommerce-peppol-factures-b2b/"}, {"@type": "BreadcrumbList", "@id": "https://registraapp.be/blog/shopify-woocommerce-peppol-factures-b2b/#breadcrumb", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://registraapp.be/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://registraapp.be/blog/"}, {"@type": "ListItem", "position": 3, "name": "Shopify, WooCommerce et Peppol", "item": "https://registraapp.be/blog/shopify-woocommerce-peppol-factures-b2b/"}]}, {"@type": "FAQPage", "@id": "https://registraapp.be/blog/shopify-woocommerce-peppol-factures-b2b/#faq", "mainEntity": [{"@type": "Question", "name": "Shopify envoie-t-il des factures Peppol nativement ?", "acceptedAnswer": {"@type": "Answer", "text": "Les factures que Shopify produit par défaut sont des documents PDF, adaptés à la vente aux particuliers mais pas des factures structurées. Pour Peppol, il faut une application compatible ou une synchronisation vers un logiciel de facturation qui envoie via un point d'accès."}}, {"@type": "Question", "name": "Faut-il envoyer via Peppol les commandes des particuliers ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. Les ventes aux consommateurs ne sont pas visées par l'obligation. La boutique doit seulement savoir distinguer une commande professionnelle belge, qui part via Peppol, d'une commande de particulier."}}, {"@type": "Question", "name": "Et les clients professionnels d'autres pays européens ?", "acceptedAnswer": {"@type": "Answer", "text": "L'obligation belge vise les opérations entre assujettis établis en Belgique. Une vente à une entreprise française ou néerlandaise suit les règles de facturation habituelles, sous réserve des obligations propres au pays du client."}}, {"@type": "Question", "name": "Qui doit envoyer la facture : la boutique ou le logiciel comptable ?", "acceptedAnswer": {"@type": "Answer", "text": "Un seul des deux. Si la boutique et le logiciel comptable envoient chacun la même facture via Peppol, le client la reçoit deux fois. Décidez quel outil est l'émetteur officiel, et désactivez l'envoi dans l'autre."}}]}]}</script>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="/">Registra<small>Peppol pour les PME belges</small></a>
+  <nav class="mainnav" aria-label="Navigation principale"><a href="/">PME et e-commerce</a><a href="/fiduciaires/">Fiduciaires</a><a href="/blog/" aria-current="page">Guides</a><a href="#contact">Contact</a></nav>
+</div></header>
+
+<main class="wrap">
+  <nav class="crumb" aria-label="Fil d'Ariane"><ol><li><a href="/">Accueil</a></li><li><a href="/blog/">Guides</a></li><li aria-current="page">Shopify, WooCommerce et Peppol</li></ol></nav>
+  <article>
+  <div class="hero small">
+    <h1>Shopify ou WooCommerce et Peppol&nbsp;: émettre des factures B2B conformes</h1>
+    <p class="lede">Une boutique en ligne belge doit envoyer via Peppol les factures de ses clients professionnels belges, et seulement elles. Voici les données à collecter, les trois montages possibles, les pièges et la façon de tester.</p>
+    <p class="meta">Par Amine, ingénieur DevOps freelance · <time datetime="2026-11-03">Mis à jour le 3 novembre 2026</time></p>
+  </div>
+  <div class="answer"><p>Depuis 2026, une boutique Shopify ou WooCommerce doit envoyer via Peppol, en format structuré, les factures adressées à des entreprises belges assujetties&nbsp;; les ventes aux particuliers restent hors obligation. Les factures PDF natives ne suffisent pas. Trois montages sont possibles&nbsp;: une application ou extension Peppol dans la boutique, une synchronisation vers votre logiciel de facturation qui envoie via son point d'accès, ou un ERP comme Odoo. Dans tous les cas, collectez le numéro de TVA au paiement, gérez les notes de crédit et testez de bout en bout.</p></div>
+  <div class="prose">
+
+  <h2 id="enjeu">Le problème propre aux boutiques en ligne</h2>
+  <p>Un logiciel de facturation classique sait qui est votre client&nbsp;: une fiche, un numéro de TVA, une adresse. Une boutique en ligne, elle, reçoit des commandes de particuliers et de professionnels mélangés, souvent sans savoir lesquels sont lesquels. Or seules les factures aux entreprises belges assujetties doivent partir via Peppol, en format structuré. Le travail consiste donc à <strong>reconnaître la commande professionnelle</strong>, à produire pour elle une facture structurée conforme, et à l'envoyer par un point d'accès Peppol.</p>
+  <p>Les factures PDF que Shopify ou WooCommerce génèrent par défaut ne suffisent pas pour ces commandes&nbsp;: un PDF n'est pas une facture structurée.</p>
+
+  <h2 id="donnees">Les données à collecter au paiement</h2>
+  <ul class="check">
+    <li><strong>Un choix «&nbsp;particulier ou entreprise&nbsp;»</strong>, ou la seule présence d'un numéro de TVA, pour déclencher le flux Peppol.</li>
+    <li><strong>Le numéro de TVA du client</strong>, vérifié. C'est à partir de ce numéro, ou du numéro d'entreprise, que l'on retrouve le destinataire dans l'annuaire Peppol.</li>
+    <li><strong>La dénomination légale et l'adresse de facturation</strong>, distinctes de l'adresse de livraison.</li>
+    <li><strong>Une éventuelle référence d'achat</strong> exigée par certains clients pour traiter la facture.</li>
+  </ul>
+  <p>Sans ces données propres dès la commande, la facture ne trouvera pas son destinataire, ou sera rejetée.</p>
+
+  <h2 id="montages">Les trois montages possibles</h2>
+  <div class="tbl">
+<table>
+<caption>Trois façons de produire des factures Peppol depuis une boutique en ligne</caption>
+<thead><tr><th scope="col">Montage</th><th scope="col">Principe</th><th scope="col">Avantages</th><th scope="col">Points d'attention</th></tr></thead>
+<tbody>
+<tr><td data-label="Montage">Application ou extension Peppol</td><td data-label="Principe">Une application Shopify ou une extension WooCommerce produit la facture UBL et l'envoie via un point d'accès</td><td data-label="Avantages">Tout reste dans la boutique, mise en place rapide</td><td data-label="Points d&#x27;attention">Abonnement supplémentaire, qualité variable des extensions, lien avec la comptabilité à prévoir</td></tr>
+<tr><td data-label="Montage">Synchronisation vers le logiciel de facturation</td><td data-label="Principe">Les commandes partent vers votre logiciel comptable ou de facturation, qui émet la facture via son point d'accès</td><td data-label="Avantages">Un seul émetteur pour tous vos canaux, la comptabilité suit naturellement</td><td data-label="Points d&#x27;attention">Règles de synchronisation à soigner&nbsp;: numérotation, remboursements, frais de port</td></tr>
+<tr><td data-label="Montage">ERP qui gère la vente et la facturation</td><td data-label="Principe">Odoo ou un ERP équivalent reçoit les commandes et facture via Peppol</td><td data-label="Avantages">Chaîne complète, stocks et comptabilité intégrés</td><td data-label="Points d&#x27;attention">Projet plus lourd, à réserver aux volumes qui le justifient</td></tr>
+</tbody>
+</table>
+</div>
+  <p>Pour la plupart des PME, le deuxième montage est le plus robuste&nbsp;: un seul outil émet toutes les factures, quel que soit le canal de vente, et votre comptable n'a qu'une source. Le premier convient aux boutiques qui n'ont pas de logiciel de facturation à côté.</p>
+
+  <h2 id="shopify">Shopify&nbsp;: les points spécifiques</h2>
+  <p>À notre connaissance, Shopify ne transmet pas lui-même de facture Peppol. Deux voies existent&nbsp;: une application de facturation de l'App Store qui gère le format UBL et l'envoi Peppol, ou une connexion entre Shopify et votre logiciel de facturation. Dans les deux cas, vérifiez la gestion des remboursements (qui doivent produire une note de crédit), des commandes modifiées après paiement et des numéros de facture, qui doivent rester continus.</p>
+
+  <h2 id="woocommerce">WooCommerce&nbsp;: les points spécifiques</h2>
+  <p>Des extensions WordPress produisent des factures Peppol depuis WooCommerce et les transmettent via un point d'accès partenaire. Avant d'en installer une, vérifiez trois choses&nbsp;: qu'elle s'appuie sur un point d'accès certifié, qu'elle gère les notes de crédit, et qu'elle fonctionne avec votre extension de facturation PDF si vous en avez une. Le champ de numéro de TVA au paiement n'existe pas par défaut dans WooCommerce&nbsp;: il faut l'ajouter.</p>
+
+  <h2 id="odoo">Odoo&nbsp;: déjà intégré, encore à paramétrer</h2>
+  <p>Odoo, éditeur belge, présente ses modules de facturation comme capables d'envoyer et de recevoir des factures via Peppol. Pour une boutique qui tourne sur Odoo, ou dont les commandes y sont synchronisées, l'essentiel est donc disponible. Il reste à activer Peppol, inscrire l'entreprise, renseigner correctement les fiches des clients professionnels et vérifier les journaux de vente utilisés par la boutique.</p>
+
+  <h2 id="reception">Ne pas oublier la réception</h2>
+  <p>Une boutique reçoit des factures de ses fournisseurs belges&nbsp;: hébergeur, transporteur, grossiste, agence. Elles arrivent désormais via Peppol, dans l'outil lié à votre point d'accès. Décidez qui les consulte, comment elles rejoignent la comptabilité, et prévenez vos fournisseurs de votre identifiant Peppol pour qu'ils cessent d'envoyer des PDF.</p>
+
+  <h2 id="pieges">Les pièges fréquents</h2>
+  <ul>
+    <li><strong>Le double envoi.</strong> La boutique et le logiciel comptable envoient la même facture. Un seul émetteur, toujours.</li>
+    <li><strong>Les notes de crédit oubliées.</strong> Un remboursement à un client professionnel belge appelle une note de crédit structurée, elle aussi via Peppol.</li>
+    <li><strong>La facture créée trop tôt.</strong> Une facture émise au paiement puis modifiée à l'expédition crée des écarts. Décidez du moment de création et tenez-vous-y.</li>
+    <li><strong>Le client professionnel non inscrit.</strong> Si le client n'est pas trouvable sur Peppol, votre outil doit vous alerter au lieu d'abandonner l'envoi en silence.</li>
+    <li><strong>La réception négligée.</strong> Vos factures fournisseurs arrivent via Peppol dans un outil&nbsp;: quelqu'un doit les traiter.</li>
+  </ul>
+
+  <h2 id="tester">Tester avant de se croire en règle</h2>
+  <ol class="steps">
+    <li><strong>Passer une commande test</strong> avec le numéro de TVA d'une entreprise réelle qui accepte de recevoir la facture, la vôtre par exemple.</li>
+    <li><strong>Vérifier la réception</strong> dans le logiciel du destinataire, et le statut d'envoi dans votre point d'accès.</li>
+    <li><strong>Rembourser partiellement</strong> et vérifier que la note de crédit arrive.</li>
+    <li><strong>Passer une commande de particulier</strong> et vérifier qu'elle ne part pas via Peppol.</li>
+    <li><strong>Contrôler la comptabilité</strong>&nbsp;: les deux documents doivent y apparaître une seule fois.</li>
+  </ol>
+
+  <div class="cta">
+    <p><strong>Votre boutique branchée sur Peppol, testée.</strong> Le paramétrage clé en main Registra (690&nbsp;€&nbsp;HTVA) choisit le montage adapté à votre boutique, la connecte, et vérifie l'envoi, la réception et les notes de crédit sur des cas réels.</p>
+    <div class="actions"><a class="btn" href="/#offre">Voir le paramétrage</a><a class="btn ghost" href="#contact" data-booking>Prendre rendez-vous (30 min)</a></div>
+  </div>
+
+  <h2 id="faq">Questions fréquentes</h2>
+  <div class="faq">
+    <details><summary>Shopify envoie-t-il des factures Peppol nativement&nbsp;?</summary><p>Les factures que Shopify produit par défaut sont des documents PDF, adaptés à la vente aux particuliers mais pas des factures structurées. Pour Peppol, il faut une application compatible ou une synchronisation vers un logiciel de facturation qui envoie via un point d&#x27;accès.</p></details>
+    <details><summary>Faut-il envoyer via Peppol les commandes des particuliers&nbsp;?</summary><p>Non. Les ventes aux consommateurs ne sont pas visées par l&#x27;obligation. La boutique doit seulement savoir distinguer une commande professionnelle belge, qui part via Peppol, d&#x27;une commande de particulier.</p></details>
+    <details><summary>Et les clients professionnels d&#x27;autres pays européens&nbsp;?</summary><p>L&#x27;obligation belge vise les opérations entre assujettis établis en Belgique. Une vente à une entreprise française ou néerlandaise suit les règles de facturation habituelles, sous réserve des obligations propres au pays du client.</p></details>
+    <details><summary>Qui doit envoyer la facture&nbsp;: la boutique ou le logiciel comptable&nbsp;?</summary><p>Un seul des deux. Si la boutique et le logiciel comptable envoient chacun la même facture via Peppol, le client la reçoit deux fois. Décidez quel outil est l&#x27;émetteur officiel, et désactivez l&#x27;envoi dans l&#x27;autre.</p></details>
+  </div>
+
+  <h2 id="sources">Sources</h2>
+  <div class="sources">
+  <ol>
+    <li><a href="https://kpmg.com/be/en/insights/my-tax-compass/indirect-tax-insights/belgium-new-royal-decree-on-structured-electronic-invoicing.html" rel="noopener">KPMG Belgium — New Royal Decree on structured electronic invoicing</a> — arrêté royal du 8 juillet 2025, barème des amendes</li>
+    <li><a href="https://www.rsm.global/belgium/fr/insights/facturation-electronique-structuree-obligatoire-partir-de-2026" rel="noopener">RSM Belgium — Facturation électronique structurée obligatoire à partir de 2026</a> — champ d'application et exclusions</li>
+    <li><a href="https://docs.peppol.eu/poacc/billing/3.0/" rel="noopener">OpenPeppol — Peppol BIS Billing 3.0</a> — spécification officielle</li>
+    <li><a href="https://efacture.belgium.be/fr" rel="noopener">SPF Finances — portail officiel de la facturation électronique</a> — FAQ, liste des points d'accès</li>
+  </ol>
+  <p class="fine">Sources consultées le 3 novembre 2026. Les fonctionnalités des applications et extensions évoluent vite&nbsp;: vérifiez-les au moment de votre choix.</p>
+  </div>
+
+  <h2>À lire aussi</h2>
+  <div class="related">
+    <a href="/blog/peppol-obligatoire-belgique-2026/"><strong>Peppol obligatoire en 2026</strong><span>Qui est concerné, ce qui est exclu, le calendrier.</span></a>
+    <a href="/blog/amendes-peppol-periode-tolerance/"><strong>Amendes et période de tolérance</strong><span>Le barème et la situation depuis avril 2026.</span></a>
+    <a href="/#diagnostic"><strong>Diagnostic gratuit</strong><span>Huit questions pour vérifier votre chaîne Peppol.</span></a>
+  </div>
+  </div>
+  </article>
+
+
+  <section id="contact">
+    <h2 class="s">Demander le diagnostic gratuit</h2>
+    <p class="sub">Réponse écrite sous un jour ouvré&nbsp;: quel outil, quel point d'accès Peppol, quels flux à brancher, et le prix ferme. Aucun appel commercial non sollicité.</p>
+    <div class="contact-grid">
+    <div>
+    <form id="f" method="POST" action="https://formspree.io/f/mzeejnkr">
+      <label for="email">E-mail professionnel</label>
+      <input id="email" name="email" type="email" required autocomplete="email">
+      <label for="societe">Entreprise</label>
+      <input id="societe" name="entreprise" type="text" required autocomplete="organization">
+      <label for="region">Région</label>
+      <select id="region" name="region"><option>Wallonie</option><option>Bruxelles</option><option>Flandre</option></select>
+      <label for="outil">Votre outil de facturation ou de vente</label>
+      <select id="outil" name="outil"><option>Shopify</option><option>WooCommerce</option><option>Odoo</option><option>Logiciel comptable ou de facturation</option><option>Autre ou je ne sais pas</option></select>
+      <label for="situation">Où en êtes-vous&nbsp;?</label>
+      <select id="situation" name="situation"><option>Pas encore inscrit sur Peppol</option><option>Inscrit, mais les factures partent encore en PDF</option><option>Factures envoyées via Peppol, à vérifier</option><option>Je ne sais pas</option></select>
+      <label for="msg">Votre situation (facultatif)</label>
+      <textarea id="msg" name="message" rows="3"></textarea>
+      <input type="hidden" name="score_diagnostic" id="scoreField" value="">
+      <input type="hidden" name="site" value="registraapp.be">
+      <input type="hidden" name="source" value="registraapp-be-blog-ecommerce-v1">
+      <input type="hidden" name="_subject" value="Demande Registra Belgique (blog-ecommerce)">
+      <button class="btn" type="submit">Envoyer</button>
+      <p class="fine">Vos informations servent uniquement à répondre à cette demande.</p>
+    </form>
+    <div class="thanks" id="t"><p><strong>Demande envoyée.</strong> Vous recevez une réponse écrite avec un prix ferme sous un jour ouvré.</p></div>
+    </div>
+    <aside class="booking">
+      <h3>Plutôt en parler&nbsp;?</h3>
+      <p>Trente minutes en visio pour regarder votre outil de facturation, votre boutique ou votre portefeuille de dossiers. Vous repartez avec la liste de ce qu'il reste à faire.</p>
+      <a class="btn" href="#contact" data-booking>Prendre rendez-vous (30 min)</a>
+    </aside>
+    </div>
+  </section>
+
+</main>
+
+<footer><div class="wrap">
+<p>Registra — mise en conformité Peppol pour les PME, e-commerçants et fiduciaires de Wallonie et de Bruxelles. Paramétrage conduit par Amine, ingénieur DevOps freelance (AWS, GCP, Azure, Kubernetes, Terraform).</p>
+<p><a href="/">PME et e-commerce</a> · <a href="/fiduciaires/">Fiduciaires</a> · <a href="/blog/">Guides</a>&nbsp;: <a href="/blog/peppol-obligatoire-belgique-2026/">Peppol obligatoire en 2026</a> · <a href="/blog/shopify-woocommerce-peppol-factures-b2b/">Shopify, WooCommerce et Peppol</a> · <a href="/blog/amendes-peppol-periode-tolerance/">Amendes et période de tolérance</a></p>
+<p>Registra configure des outils et des flux&nbsp;; ce n'est ni une fiduciaire, ni un conseil fiscal, ni un point d'accès Peppol. Les guides ne constituent pas un avis fiscal ou juridique. Tous les prix sont fixes et hors TVA.</p>
+</div></footer>
+<script>
+(function(){
+  var f=document.getElementById('f'),t=document.getElementById('t');
+  if(f){f.addEventListener('submit',function(e){e.preventDefault();
+    fetch(f.action,{method:'POST',body:new FormData(f),headers:{Accept:'application/json'}})
+    .then(function(r){if(r.ok){f.style.display='none';t.style.display='block';}else{alert("La demande n'est pas partie. Réessayez dans quelques minutes.");}})
+    .catch(function(){alert("La demande n'est pas partie. Vérifiez votre connexion et réessayez.");});
+  });}
+})();
+</script>
+</body>
+</html>
